@@ -1,0 +1,18 @@
+{% from "etcd/map.jinja" import etcd_settings with context -%}
+
+[Unit]
+Description="etcd {{ etcd_settings.install.version }} distributed key-value store"
+
+[Service]
+User=root
+Type=simple
+EnvironmentFile=/etc/default/etcd.env
+Environment=ETCD_DATA_DIR={{ etcd_settings.data_directory }}
+Environment=ETCD_NAME=%m
+ExecStart={{ etcd_settings.binary_directory }}/etcd
+Restart=always
+RestartSec=10s
+LimitNOFILE=40000
+
+[Install]
+WantedBy=multi-user.target
